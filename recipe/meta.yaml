@@ -1,0 +1,42 @@
+{% set version = "3c7fc82" %}
+{% set sha256 = "4d6cd00602a8c826e062e30eb4ef27037740cb039d7dfa06479e2d8a49dad4a2" %}
+
+package:
+  name: mpark-variant
+  version: "2020.1.29"
+
+source:
+  url: https://github.com/mpark/variant/archive/{{ version }}.zip
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  skip: True  # [win and vc<14]
+
+requirements:
+  build:
+    - {{ compiler('cxx') }}
+    - cmake >=3.1
+    - ninja
+  host: []  # Empty host dependency section
+
+test:
+  commands:
+    - test -f ${PREFIX}/include/mpark/variant.hpp                           # [unix]
+    - test -f ${PREFIX}/lib/cmake/mpark_variant/mpark_variant-config.cmake  # [unix]
+    - if exist %LIBRARY_PREFIX%\include\mpark\variant.hpp (exit 0) else (exit 1)                           # [win]
+    - if exist %LIBRARY_PREFIX%\lib\cmake\mpark_variant\mpark_variant-config.cmake (exit 0) else (exit 1)  # [win]
+
+about:
+  home: https://github.com/mpark/variant
+  license: Boost-1.0
+  license_file: LICENSE.md
+  summary: C++17 std::variant for C++11/14/17
+  description: |
+    MPark.Variant is an implementation of C++17 std::variant for C++11/14/17.
+    Based on my implementation of std::variant for libc++
+    Continuously tested against libc++'s std::variant test suite.
+
+extra:
+  recipe-maintainers:
+    - zhihao.yuan
